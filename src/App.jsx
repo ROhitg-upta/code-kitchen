@@ -27,6 +27,7 @@ import AiChefFinderModule from "./modules/concierge/AiChefFinderModule";
 import BranchBattleModule from "./modules/leaderboard/BranchBattleModule";
 import CommandPalette from "./modules/command/CommandPalette";
 import AgentTrace from "./components/ui/AgentTrace";
+import { chefApi } from "./lib/api";
 
 const NAV_ITEMS = [
   { id: "home", label: "Home", icon: Home },
@@ -57,6 +58,7 @@ export default function App() {
 
   const [activeView, setActiveView] = useState("home");
   const [adminAuth, setAdminAuth] = useState(false);
+  const [backendLive, setBackendLive] = useState(false);
   const [broadcastMsg, setBroadcastMsg] = useState(
     "CODECHEF ABESEC COOK-OFF 7.0 REGISTRATIONS CLOSING SOON — BOOK YOUR VERIFIED HOLOGRAPHIC QR CHEF PASS NOW"
   );
@@ -66,6 +68,32 @@ export default function App() {
   const [selectedEventDetail, setSelectedEventDetail] = useState(null);
   const [myPassesOpen, setMyPassesOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Hydrate from Express + MongoDB/JSON Backend on mount
+  useEffect(() => {
+    let mounted = true;
+    async function syncFromBackend() {
+      const health = await chefApi.getHealth();
+      if (!health?.success || !mounted) return;
+      setBackendLive(true);
+
+      const [evRes, regRes, bcastRes] = await Promise.all([
+        chefApi.getEvents(),
+        chefApi.getRegistrations(),
+        chefApi.getBroadcast(),
+      ]);
+      if (!mounted) return;
+      if (evRes?.success && Array.isArray(evRes.data)) setEvents(evRes.data);
+      if (regRes?.success && Array.isArray(regRes.data))
+        setRegistrations(regRes.data);
+      if (bcastRes?.success && typeof bcastRes.message === "string")
+        setBroadcastMsg(bcastRes.message);
+    }
+    syncFromBackend();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -112,17 +140,20 @@ export default function App() {
 
   const handleAddEvent = useCallback((newEvent) => {
     setEvents((prev) => [...prev, newEvent]);
+    chefApi.createEvent(newEvent);
   }, []);
 
   const handleEditEvent = useCallback((updated) => {
     setEvents((prev) =>
       prev.map((e) => (e.id === updated.id ? updated : e))
     );
+    chefApi.updateEvent(updated.id, updated);
   }, []);
 
   const handleDeleteEvent = useCallback((eventId) => {
     setEvents((prev) => prev.filter((e) => e.id !== eventId));
     setRegistrations((prev) => prev.filter((r) => r.eventId !== eventId));
+    chefApi.deleteEvent(eventId);
   }, []);
 
   const handleRegister = useCallback((newReg) => {
@@ -136,6 +167,7 @@ export default function App() {
     );
     setRegisterEvent(null);
     setViewTicket(newReg);
+    chefApi.createRegistration(newReg);
 
     try {
       confetti({
@@ -153,6 +185,12 @@ export default function App() {
         r.id === regId ? { ...r, checkedIn: !r.checkedIn } : r
       )
     );
+    chefApi.toggleCheckIn(regId);
+  }, []);
+
+  const handleSetBroadcast = useCallback((msg) => {
+    setBroadcastMsg(msg);
+    chefApi.setBroadcast(msg);
   }, []);
 
   const handleResetData = useCallback(() => {
@@ -161,6 +199,7 @@ export default function App() {
     setBroadcastMsg(
       "CODECHEF ABESEC COOK-OFF 7.0 REGISTRATIONS CLOSING SOON — BOOK YOUR VERIFIED HOLOGRAPHIC QR CHEF PASS NOW"
     );
+    chefApi.resetData();
   }, []);
 
   const handleExportCsv = useCallback(() => {
@@ -257,6 +296,23 @@ export default function App() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2">
+            <span
+              className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-950 border border-zinc-800 text-[10px] font-mono text-zinc-400"
+              title={
+                backendLive
+                  ? "Connected to Express + MongoDB/JSON Backend API"
+                  : "Using LocalStorage Persistence Mode"
+              }
+            >
+              <span
+                className={cn(
+                  "w-1.5 h-1.5 rounded-full",
+                  backendLive ? "bg-white animate-pulse" : "bg-zinc-500"
+                )}
+              />
+              {backendLive ? "API LIVE" : "LOCAL DB"}
+            </span>
+
             <button
               onClick={() => setMyPassesOpen(true)}
               className="cursor-pointer flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-white transition"
@@ -376,7 +432,7 @@ export default function App() {
             onEditEvent={handleEditEvent}
             onDeleteEvent={handleDeleteEvent}
             onToggleCheckIn={handleToggleCheckIn}
-            onSetBroadcast={setBroadcastMsg}
+            onSetBroadcast={handleSetBroadcast}
             onResetData={handleResetData}
             onNavigate={handleNavigate}
           />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   X,
   User,
@@ -8,8 +8,8 @@ import {
   AlertTriangle,
   Ticket,
   CheckCircle2,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function RegistrationModal({
   event,
@@ -17,37 +17,29 @@ export default function RegistrationModal({
   onClose,
   onRegister,
 }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [year, setYear] = useState('');
-  const [branch, setBranch] = useState('');
-  const [phone, setPhone] = useState('');
-  const [handle, setHandle] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [year, setYear] = useState("");
+  const [branch, setBranch] = useState("");
+  const [phone, setPhone] = useState("");
+  const [handle, setHandle] = useState("");
   const [errors, setErrors] = useState({});
   const [duplicateTicket, setDuplicateTicket] = useState(null);
 
-  // Live counts
   const liveCount = registrations.filter((r) => r.eventId === event.id).length;
   const remaining = Math.max(0, event.capacity - liveCount);
   const isFull = remaining <= 0;
 
-  const remainingColor =
-    remaining < 5
-      ? 'text-rose-400'
-      : remaining < 20
-        ? 'text-amber-400'
-        : 'text-emerald-400';
-
   const validate = () => {
     const errs = {};
     if (!name.trim() || name.trim().length < 2)
-      errs.name = 'Name must be at least 2 characters.';
-    if (!email.trim() || !email.includes('@'))
-      errs.email = 'Enter a valid email address.';
-    if (!year) errs.year = 'Please select your year.';
-    if (!branch) errs.branch = 'Please select your branch.';
+      errs.name = "Name must be at least 2 characters.";
+    if (!email.trim() || !email.includes("@"))
+      errs.email = "Enter a valid college email address.";
+    if (!year) errs.year = "Please select your academic year.";
+    if (!branch) errs.branch = "Please select your branch.";
     if (!phone.trim() || !/^[6-9]\d{9}$/.test(phone.trim()))
-      errs.phone = 'Enter a valid 10-digit WhatsApp number.';
+      errs.phone = "Enter a valid 10-digit WhatsApp number.";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -56,7 +48,6 @@ export default function RegistrationModal({
     e.preventDefault();
     if (!validate()) return;
 
-    // Duplicate check
     const existing = registrations.find(
       (r) =>
         r.email.toLowerCase() === email.trim().toLowerCase() &&
@@ -67,10 +58,8 @@ export default function RegistrationModal({
       return;
     }
 
-    // Capacity check
     if (isFull) return;
 
-    // Generate ticket
     const ticketId = `CC-ABES-${String(
       Math.floor(1000 + Math.random() * 9000)
     )}`;
@@ -86,10 +75,10 @@ export default function RegistrationModal({
       branch,
       phone: phone.trim(),
       handle: handle.trim(),
-      stationInterest: 'Development + Events',
-      registeredAt: new Date().toLocaleString('en-IN', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
+      stationInterest: "Development + Events",
+      registeredAt: new Date().toLocaleString("en-IN", {
+        dateStyle: "medium",
+        timeStyle: "short",
       }),
       checkedIn: false,
     };
@@ -98,152 +87,128 @@ export default function RegistrationModal({
   };
 
   const inputBase =
-    'w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-amber-500/50 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition';
+    "w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-white/60 focus:outline-none transition";
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="glass-card max-w-lg w-full rounded-3xl p-6 sm:p-8 border border-amber-500/30 shadow-[0_0_50px_rgba(245,158,11,0.15)] animate-fadeIn max-h-[90vh] overflow-y-auto relative">
-        {/* Close */}
+    <div
+      className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="glass-card max-w-lg w-full rounded-3xl p-6 sm:p-8 border border-white/25 shadow-[0_25px_80px_rgba(0,0,0,0.9)] animate-fadeIn max-h-[90vh] overflow-y-auto relative">
         <button
           onClick={onClose}
-          className="cursor-pointer absolute top-4 right-4 p-2 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition"
+          className="cursor-pointer absolute top-4 right-4 p-2 rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* Header */}
-        <h2 className="font-display text-xl font-bold text-white flex items-center gap-2">
-          <Ticket className="w-5 h-5 text-amber-400" />
-          Book Your Seat
+        <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+          // OFFICIAL SEAT RESERVATION
+        </span>
+        <h2 className="font-display text-2xl font-bold text-white flex items-center gap-2 mt-1">
+          <Ticket className="w-5 h-5 text-white" />
+          Book Holographic Pass
         </h2>
-        <p className="font-mono text-sm text-amber-400 mt-1 truncate pr-8">
+        <p className="font-mono text-xs text-zinc-300 mt-1 truncate pr-8">
           {event.title}
         </p>
 
-        {/* Seat status */}
         <div className="mt-3 flex items-center gap-2">
-          <span
-            className={cn(
-              'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold border',
-              isFull
-                ? 'text-rose-300 bg-rose-500/15 border-rose-500/30'
-                : remainingColor === 'text-rose-400'
-                  ? 'text-rose-300 bg-rose-500/15 border-rose-500/30'
-                  : remainingColor === 'text-amber-400'
-                    ? 'text-amber-300 bg-amber-500/15 border-amber-500/30'
-                    : 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30'
-            )}
-          >
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-white/10 text-white border border-white/20">
             {isFull ? (
               <>
                 <AlertTriangle className="w-3.5 h-3.5" />
-                Full Capacity
+                FULL CAPACITY
               </>
             ) : (
               <>
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                {remaining} seats remaining
+                {remaining} SEATS AVAILABLE
               </>
             )}
           </span>
         </div>
 
-        {/* Full capacity block */}
-        {isFull && (
-          <div className="mt-5 bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 text-center">
-            <p className="text-rose-300 font-semibold text-sm">
-              This event is at full capacity. 😔
-            </p>
-            <p className="text-rose-400/70 text-xs mt-1">
-              Check back later or explore other events.
-            </p>
-          </div>
-        )}
-
-        {/* Duplicate warning */}
         {duplicateTicket && (
-          <div className="mt-5 bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
+          <div className="mt-5 bg-zinc-900 border border-white/30 rounded-2xl p-4">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <AlertTriangle className="w-5 h-5 text-white shrink-0 mt-0.5" />
               <div>
-                <p className="text-amber-300 font-semibold text-sm">
-                  You're already registered!
+                <p className="text-white font-semibold text-sm">
+                  Duplicate Registration Detected
                 </p>
-                <p className="text-amber-400/70 text-xs mt-1">
-                  Your ticket:{' '}
-                  <span className="font-mono font-semibold text-amber-300">
+                <p className="text-zinc-400 text-xs mt-1">
+                  Your issued ticket ID:{" "}
+                  <span className="font-mono font-bold text-white">
                     {duplicateTicket.ticketId}
                   </span>
                 </p>
                 <button
-                  onClick={() => {
-                    onClose();
-                  }}
-                  className="cursor-pointer mt-2 px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold border border-amber-500/30 transition"
+                  onClick={onClose}
+                  className="cursor-pointer mt-3 px-4 py-1.5 rounded-lg bg-white text-black text-xs font-bold"
                 >
-                  Close
+                  Done
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Form */}
         {!isFull && !duplicateTicket && (
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-            {/* Full Name */}
             <div>
-              <label className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1.5 block">
+              <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider mb-1.5 block">
                 Full Name *
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Your full name"
-                  className={cn(inputBase, 'pl-10')}
+                  placeholder="Rohit Gupta"
+                  className={cn(inputBase, "pl-10")}
                 />
               </div>
               {errors.name && (
-                <p className="text-rose-400 text-xs mt-1">{errors.name}</p>
+                <p className="text-zinc-300 font-mono text-xs mt-1">
+                  ! {errors.name}
+                </p>
               )}
             </div>
 
-            {/* College Email */}
             <div>
-              <label className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1.5 block">
+              <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider mb-1.5 block">
                 College Email *
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@abes.ac.in"
-                  className={cn(inputBase, 'pl-10')}
+                  placeholder="rohit.25b0101@abes.ac.in"
+                  className={cn(inputBase, "pl-10")}
                 />
               </div>
-              <p className="text-slate-500 text-[11px] mt-1">
-                Use your @abes.ac.in email
-              </p>
               {errors.email && (
-                <p className="text-rose-400 text-xs mt-1">{errors.email}</p>
+                <p className="text-zinc-300 font-mono text-xs mt-1">
+                  ! {errors.email}
+                </p>
               )}
             </div>
 
-            {/* Year & Branch row */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1.5 block">
+                <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider mb-1.5 block">
                   Year *
                 </label>
                 <select
                   value={year}
                   onChange={(e) => setYear(e.target.value)}
-                  className={cn(inputBase, 'cursor-pointer')}
+                  className={cn(inputBase, "cursor-pointer")}
                 >
                   <option value="">Select Year</option>
                   <option value="1st Year (2026-30)">1st Year (2026-30)</option>
@@ -252,17 +217,19 @@ export default function RegistrationModal({
                   <option value="4th Year (2023-27)">4th Year (2023-27)</option>
                 </select>
                 {errors.year && (
-                  <p className="text-rose-400 text-xs mt-1">{errors.year}</p>
+                  <p className="text-zinc-300 font-mono text-xs mt-1">
+                    ! {errors.year}
+                  </p>
                 )}
               </div>
               <div>
-                <label className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1.5 block">
+                <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider mb-1.5 block">
                   Branch *
                 </label>
                 <select
                   value={branch}
                   onChange={(e) => setBranch(e.target.value)}
-                  className={cn(inputBase, 'cursor-pointer')}
+                  className={cn(inputBase, "cursor-pointer")}
                 >
                   <option value="">Select Branch</option>
                   <option value="CSE">CSE</option>
@@ -274,59 +241,60 @@ export default function RegistrationModal({
                   <option value="Other">Other</option>
                 </select>
                 {errors.branch && (
-                  <p className="text-rose-400 text-xs mt-1">{errors.branch}</p>
+                  <p className="text-zinc-300 font-mono text-xs mt-1">
+                    ! {errors.branch}
+                  </p>
                 )}
               </div>
             </div>
 
-            {/* WhatsApp */}
             <div>
-              <label className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1.5 block">
+              <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider mb-1.5 block">
                 WhatsApp Number *
               </label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                 <input
                   type="tel"
                   inputMode="numeric"
                   value={phone}
                   onChange={(e) =>
-                    setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))
+                    setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
                   }
                   placeholder="9876543210"
-                  className={cn(inputBase, 'pl-10')}
+                  className={cn(inputBase, "pl-10")}
                 />
               </div>
               {errors.phone && (
-                <p className="text-rose-400 text-xs mt-1">{errors.phone}</p>
+                <p className="text-zinc-300 font-mono text-xs mt-1">
+                  ! {errors.phone}
+                </p>
               )}
             </div>
 
-            {/* GitHub/CodeChef Handle */}
             <div>
-              <label className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1.5 block">
-                GitHub / CodeChef Handle{' '}
-                <span className="text-slate-600">(optional)</span>
+              <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider mb-1.5 block">
+                GitHub / CodeChef Handle{" "}
+                <span className="text-zinc-600">(Optional)</span>
               </label>
               <div className="relative">
-                <Link className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Link className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                 <input
                   type="text"
                   value={handle}
                   onChange={(e) => setHandle(e.target.value)}
-                  placeholder="github.com/your-handle"
-                  className={cn(inputBase, 'pl-10')}
+                  placeholder="github.com/ROhitg-upta"
+                  className={cn(inputBase, "pl-10")}
                 />
               </div>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
-              className="cursor-pointer w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/25 hover:from-amber-400 hover:to-orange-500 transition-all duration-200 active:scale-[0.98] mt-2"
+              className="cursor-pointer w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-white hover:bg-zinc-200 text-black font-bold text-sm transition-all active:scale-[0.98] mt-2"
             >
               <Ticket className="w-4 h-4" />
-              Confirm Registration & Get Chef Pass
+              Generate Holographic QR Chef Pass
             </button>
           </form>
         )}

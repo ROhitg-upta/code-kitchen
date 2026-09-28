@@ -1,0 +1,348 @@
+{
+  "events": [
+    {
+      "id": "evt-cookoff-2026",
+      "title": "Cook-Off 7.0: The 24-Hour Flagship Hackathon & CP Battle",
+      "subtitle": "Blend debugging with pain, mix deadlines with chai — ABESEC’s ultimate overnight tech showdown.",
+      "category": "Hackathon",
+      "date": "2026-10-18",
+      "time": "09:00 AM – Next Day 09:00 AM",
+      "venue": "Aryabhatta Block Seminar Hall & Central Computing Lab",
+      "description": "Our flagship 24-hour inter-branch hackathon & nocturnal algorithmic Cook-Off! Build full-stack AI/Web3/FinTech products during the day, survive midnight bug-hunts over unlimited kulhad chai, and compete in rapid-fire lightning CP rounds at 2:00 AM.",
+      "prizePool": "₹75,000 + Goodies & PPIs",
+      "capacity": 120,
+      "registeredCount": 104,
+      "featured": true,
+      "difficulty": "All Levels (1st - 4th Year)",
+      "teamSize": "2 - 4 Members (or Solo)",
+      "tags": [
+        "24-Hr Hackathon",
+        "Overnight Chai",
+        "Flagship",
+        "Cash Prizes",
+        "PPI"
+      ],
+      "prerequisites": "Laptop, College ID Card, GitHub Account, and appetite for 2 AM debugging.",
+      "mentors": [
+        {
+          "name": "Aarav Verma",
+          "role": "Chapter President (4th Yr CSE)",
+          "badge": "6★ CodeChef"
+        },
+        {
+          "name": "Sneha Nair",
+          "role": "Development Lead (3rd Yr IT)",
+          "badge": "GSoC ’26"
+        },
+        {
+          "name": "Rohan Gupta",
+          "role": "Events & Ops Head (3rd Yr AIML)",
+          "badge": "Ops Commander"
+        }
+      ],
+      "agenda": [
+        {
+          "time": "09:00 AM",
+          "stage": "Gate Check-In & QR Pass Verification",
+          "owner": "Events & Ops Desk"
+        },
+        {
+          "time": "10:30 AM",
+          "stage": "Problem Statements Unlocked & Kitchen Bell Rings 🔔",
+          "owner": "Core Dev & CP Leads"
+        },
+        {
+          "time": "04:00 PM",
+          "stage": "Mentorship Checkpoint 1 + Samosa & Chai Fuel Drop ☕",
+          "owner": "Mentors & Ops Team"
+        },
+        {
+          "time": "12:00 AM",
+          "stage": "Midnight RedBull & 45-Min Lightning Bug-Smash Mini Contest",
+          "owner": "CP Station"
+        },
+        {
+          "time": "08:00 AM",
+          "stage": "Final Git Freeze, Live Jury Pitching & Winner Coronation 🏆",
+          "owner": "All Stations"
+        }
+      ]
+    },
+    {
+      "id": "evt-cp-icpc-roast",
+      "title": "CodeChef Starters ABESEC Edition: Mock ICPC & DSA Roast",
+      "subtitle": "3 Hours. 7 Algorithmic Dishes. Zero Mercy from Hidden Test Cases.",
+      "category": "Competitive Programming",
+      "date": "2026-10-10",
+      "time": "02:00 PM – 05:30 PM",
+      "venue": "Bhabha Block Lab 301 - 304",
+      "description": "Think your O(N log N) solution won’t TLE? Step into the CP Station for a proctored ACM-ICPC style contest followed by a live editorial breakdown where top rated seniors dissect Graph DP, Segment Trees, and Greedy traps.",
+      "prizePool": "₹15,000 + CodeChef Laddus",
+      "capacity": 90,
+      "registeredCount": 78,
+      "featured": false,
+      "difficulty": "Beginner to Advanced",
+      "teamSize": "Individual / Duo",
+      "tags": [
+        "DSA",
+        "C++ / Rust / Python",
+        "ICPC Style",
+        "Live Editorial"
+      ],
+      "prerequisites": "Active CodeChef ID & basic familiarity with Arrays, Sorting, and Recursion.",
+      "mentors": [
+        {
+          "name": "Kartikeya Sharma",
+          "role": "CP Lead (4th Yr CSE)",
+          "badge": "ICPC Regionalist"
+        },
+        {
+          "name": "Priyanshu Dubey",
+          "role": "Algo Setter (3rd Yr CSE-DS)",
+          "badge": "Codeforces Master"
+        }
+      ],
+      "agenda": [
+        {
+          "time": "01:45 PM",
+          "stage": "Lab Seating Allocation & System Login",
+          "owner": "Ops & Lab Coordinators"
+        },
+        {
+          "time": "02:00 PM",
+          "stage": "Contest Live on CodeChef Platform (7 Problems)",
+          "owner": "CP Team"
+        },
+        {
+          "time": "04:30 PM",
+          "stage": "Live Problem Solving & TLE Roast Session",
+          "owner": "CP Seniors"
+        }
+      ]
+    },
+    {
+      "id": "evt-dev-kitchen",
+      "title": "Ship It Fast: Next.js, System Design & Production Deployment Lab",
+      "subtitle": "Because \"It Works On My Machine\" is NOT an acceptable excuse in our kitchen.",
+      "category": "Development",
+      "date": "2026-10-14",
+      "time": "03:00 PM – 06:00 PM",
+      "venue": "Raman Block Auditorium",
+      "description": "A hands-on builder workshop by the Development Station! Learn how to architect modern React/Next.js apps, connect real-time APIs, design Linear-grade glassmorphism UIs, and deploy production pipelines on Vercel & Docker in under 120 minutes.",
+      "prizePool": "Best UI/UX Wins Mechanical Keyboard ⌨️",
+      "capacity": 150,
+      "registeredCount": 132,
+      "featured": false,
+      "difficulty": "2nd & 3rd Year Builders",
+      "teamSize": "Individual (Bring Your Laptop)",
+      "tags": [
+        "React & Tailwind",
+        "Full-Stack",
+        "Vercel CI/CD",
+        "UI/UX"
+      ],
+      "prerequisites": "VS Code, Node.js installed, and a GitHub account.",
+      "mentors": [
+        {
+          "name": "Sneha Nair",
+          "role": "Development Lead",
+          "badge": "Full-Stack Architect"
+        },
+        {
+          "name": "Aditya Raj",
+          "role": "UI/UX & Graphics Head",
+          "badge": "Design Systems"
+        }
+      ],
+      "agenda": [
+        {
+          "time": "03:00 PM",
+          "stage": "Architecture Deep Dive: Why 90% of Student Projects Look Basic",
+          "owner": "Dev Station"
+        },
+        {
+          "time": "03:45 PM",
+          "stage": "Live Code-Along: Building & Deploying an Interactive Dashboard",
+          "owner": "Dev Mentors"
+        },
+        {
+          "time": "05:15 PM",
+          "stage": "Live Repo Review & Instant PR Feedback + Swag Drop",
+          "owner": "All Mentors"
+        }
+      ]
+    },
+    {
+      "id": "evt-ai-agents-workshop",
+      "title": "Cooking with AI Agents: RAG, LLMs & Autonomous Workflows",
+      "subtitle": "Move beyond basic ChatGPT wrappers and build multi-agent tools that execute real actions.",
+      "category": "Workshop",
+      "date": "2026-10-22",
+      "time": "02:30 PM – 05:00 PM",
+      "venue": "Aryabhatta Block Seminar Hall 2",
+      "description": "Dive into Gemini API, tool calling, vector embeddings, and autonomous workflows. Every participant leaves with a deployed AI Agent integrated into a live web interface.",
+      "prizePool": "Free API Credits + Official Certificate",
+      "capacity": 80,
+      "registeredCount": 64,
+      "featured": false,
+      "difficulty": "Intermediate",
+      "teamSize": "Individual",
+      "tags": [
+        "GenAI",
+        "LLM Agents",
+        "Python / JS",
+        "API Integration"
+      ],
+      "prerequisites": "Basic JavaScript or Python knowledge.",
+      "mentors": [
+        {
+          "name": "Devansh Tiwari",
+          "role": "AI/ML Researcher (4th Yr AIML)",
+          "badge": "AI Lead"
+        }
+      ],
+      "agenda": [
+        {
+          "time": "02:30 PM",
+          "stage": "How Agentic Tool-Calling Works Under the Hood",
+          "owner": "AI Station"
+        },
+        {
+          "time": "03:30 PM",
+          "stage": "Hands-On Build: Creating a Campus Concierge AI Agent",
+          "owner": "Participants"
+        }
+      ]
+    },
+    {
+      "id": "evt-techtalk-chai",
+      "title": "Chai, Commits & Career: GSoC, Off-Campus Internships & Open Source",
+      "subtitle": "Unfiltered fireside chat with ABESEC alumni & seniors placed at top product companies.",
+      "category": "Tech Talk",
+      "date": "2026-10-26",
+      "time": "04:00 PM – 05:45 PM",
+      "venue": "Main Open Air Theatre (OAT) / Raman Audi",
+      "description": "How do you balance AKTU sessional exams, attendance, DSA, and high-impact development projects in your 2nd year? Join our most candid session of the semester with live resume & GitHub profile teardowns.",
+      "prizePool": "1-on-1 Mock Interviews + Exclusive Merch",
+      "capacity": 200,
+      "registeredCount": 168,
+      "featured": false,
+      "difficulty": "Open for All Years",
+      "teamSize": "Individual",
+      "tags": [
+        "GSoC",
+        "Internships",
+        "GitHub Teardown",
+        "Fireside Chat"
+      ],
+      "prerequisites": "Bring your GitHub link & burning career questions.",
+      "mentors": [
+        {
+          "name": "Aarav Verma",
+          "role": "Chapter President",
+          "badge": "Incoming SWE"
+        },
+        {
+          "name": "Ananya Mishra",
+          "role": "PR & Events Lead",
+          "badge": "Host"
+        }
+      ],
+      "agenda": [
+        {
+          "time": "04:00 PM",
+          "stage": "The 2nd-Year Roadmap: DSA vs Dev MythBusters",
+          "owner": "Core Panel"
+        },
+        {
+          "time": "04:45 PM",
+          "stage": "Live On-Screen GitHub & Resume Roasts",
+          "owner": "Senior Devs"
+        },
+        {
+          "time": "05:20 PM",
+          "stage": "Open Q&A + Kulhad Chai Networking",
+          "owner": "Events & PR Team"
+        }
+      ]
+    }
+  ],
+  "registrations": [
+    {
+      "id": "reg-101",
+      "ticketId": "CC-ABES-9041",
+      "eventId": "evt-cookoff-2026",
+      "eventTitle": "Cook-Off 7.0: The 24-Hour Flagship Hackathon & CP Battle",
+      "name": "Rohit Sharma",
+      "email": "rohit.25b010@abes.ac.in",
+      "year": "2nd Year (2025-29)",
+      "branch": "CSE",
+      "phone": "9876543210",
+      "handle": "github.com/rohit-dev",
+      "registeredAt": "2026-09-28 01:40 PM",
+      "checkedIn": true,
+      "stationInterest": "Development + Events"
+    },
+    {
+      "id": "reg-102",
+      "ticketId": "CC-ABES-8812",
+      "eventId": "evt-cookoff-2026",
+      "eventTitle": "Cook-Off 7.0: The 24-Hour Flagship Hackathon & CP Battle",
+      "name": "Aayush Pratap Singh",
+      "email": "aayush.25b014@abes.ac.in",
+      "year": "2nd Year (2025-29)",
+      "branch": "CSE-AIML",
+      "phone": "9811223344",
+      "handle": "codechef.com/users/aayush_cp",
+      "registeredAt": "2026-09-28 11:15 AM",
+      "checkedIn": true,
+      "stationInterest": "Competitive Programming"
+    },
+    {
+      "id": "reg-103",
+      "ticketId": "CC-ABES-7734",
+      "eventId": "evt-dev-kitchen",
+      "eventTitle": "Ship It Fast: Next.js, System Design & Production Deployment Lab",
+      "name": "Kriti Srivastava",
+      "email": "kriti.25b089@abes.ac.in",
+      "year": "2nd Year (2025-29)",
+      "branch": "IT",
+      "phone": "9718293847",
+      "handle": "github.com/kriti-ui",
+      "registeredAt": "2026-09-28 12:05 PM",
+      "checkedIn": false,
+      "stationInterest": "Development + Graphics"
+    },
+    {
+      "id": "reg-104",
+      "ticketId": "CC-ABES-6590",
+      "eventId": "evt-cp-icpc-roast",
+      "eventTitle": "CodeChef Starters ABESEC Edition: Mock ICPC & DSA Roast",
+      "name": "Harshvardhan Gaur",
+      "email": "harsh.25b042@abes.ac.in",
+      "year": "2nd Year (2025-29)",
+      "branch": "CSE-DS",
+      "phone": "9958473625",
+      "handle": "codechef.com/users/harsh_ds",
+      "registeredAt": "2026-09-27 08:20 PM",
+      "checkedIn": false,
+      "stationInterest": "Competitive Programming"
+    },
+    {
+      "id": "reg-105",
+      "ticketId": "CC-ABES-5419",
+      "eventId": "evt-techtalk-chai",
+      "eventTitle": "Chai, Commits & Career: GSoC, Off-Campus Internships & Open Source",
+      "name": "Nandini Agarwal",
+      "email": "nandini.25b112@abes.ac.in",
+      "year": "1st Year (2026-30)",
+      "branch": "ECE",
+      "phone": "9123456780",
+      "handle": "linkedin.com/in/nandini-abes",
+      "registeredAt": "2026-09-28 09:50 AM",
+      "checkedIn": true,
+      "stationInterest": "Events & PR"
+    }
+  ],
+  "broadcastMsg": "CODECHEF ABESEC COOK-OFF 7.0 REGISTRATIONS CLOSING SOON — BOOK YOUR VERIFIED HOLOGRAPHIC QR CHEF PASS NOW"
+}

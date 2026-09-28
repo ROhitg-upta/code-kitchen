@@ -1,46 +1,15 @@
-/**
- * BranchBattleModule.jsx
- * ──────────────────────────────────────────────────────────────
- * Module 6 — Live ABESEC Branch Participation Battle
- *
- * Aggregates registrations by branch, renders animated horizontal
- * bar chart with rank badges (🥇🥈🥉), and a recent activity feed
- * showing the last 5 registrations.
- *
- * @module  modules/leaderboard/BranchBattleModule
- * @see     PROMPTS.md — PROMPT 7
- * ──────────────────────────────────────────────────────────────
- */
-
-import React, { useState, useEffect, useMemo } from 'react';
-import { Trophy } from 'lucide-react';
-import { cn } from '@/lib/utils';
-
-/* ================================================================
-   Constants
-   ================================================================ */
-
-const RANK_MEDALS = ['🥇', '🥈', '🥉'];
-
-const BAR_GRADIENTS = [
-  'bg-gradient-to-r from-amber-500 to-amber-400',   // 1st
-  'bg-gradient-to-r from-slate-400 to-slate-300',    // 2nd
-  'bg-gradient-to-r from-amber-700 to-amber-600',    // 3rd
-];
-
-/* ================================================================
-   BranchBattleModule — Main exported component
-   ================================================================ */
+import React, { useState, useEffect, useMemo } from "react";
+import { Trophy } from "lucide-react";
+import { cn } from "@/lib/utils";
+import SpotlightCard from "@/components/ui/SpotlightCard";
 
 export default function BranchBattleModule({ registrations }) {
-  // Animation trigger: bars animate from 0 → full width on mount
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    const id = setTimeout(() => setMounted(true), 100);
+    const id = setTimeout(() => setMounted(true), 80);
     return () => clearTimeout(id);
   }, []);
 
-  // Aggregate by branch
   const leaderboard = useMemo(() => {
     const map = registrations.reduce((acc, r) => {
       if (!r.branch) return acc;
@@ -55,142 +24,123 @@ export default function BranchBattleModule({ registrations }) {
 
   const maxCount = leaderboard.length > 0 ? leaderboard[0].count : 1;
 
-  // Recent activity: last 5 registrations
   const recentActivity = useMemo(() => {
-    return [...registrations]
-      .sort((a, b) => {
-        // Sort by registeredAt descending — handle string dates
-        if (a.registeredAt > b.registeredAt) return -1;
-        if (a.registeredAt < b.registeredAt) return 1;
-        return 0;
-      })
-      .slice(0, 5);
+    return [...registrations].slice(0, 6);
   }, [registrations]);
 
-  // Empty state
-  if (registrations.length === 0) {
-    return (
-      <div className="px-4 py-20 max-w-3xl mx-auto text-center">
-        <Trophy className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-        <p className="text-slate-400 font-medium">No registrations yet</p>
-        <p className="text-slate-500 text-sm mt-1">
-          Be the first chef to register and claim the top spot!
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <div className="px-4 py-10 sm:py-14 max-w-3xl mx-auto">
+    <div className="px-4 py-12 sm:py-16 max-w-4xl mx-auto min-h-screen bg-cyber-grid">
       {/* Header */}
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/25 mb-4">
-          <Trophy className="w-5 h-5 text-amber-400" />
-          <span className="font-mono text-xs text-amber-300 tracking-wider uppercase">
-            Live Rankings
+      <div className="mb-10 border-b border-zinc-800 pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <span className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-400">
+            03 // LIVE CAMPUS TELEMETRY
           </span>
+          <h1 className="text-3xl sm:text-5xl font-display font-bold text-white mt-1 tracking-tight">
+            ABESEC BRANCH BATTLE.
+          </h1>
+          <p className="text-zinc-400 mt-2 text-sm max-w-lg">
+            Real-time department rankings computed from verified event
+            registrations across the Code Kitchen.
+          </p>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-display font-bold text-white">
-          🏆 ABESEC Branch Battle
-        </h1>
-        <p className="text-slate-400 mt-2">
-          Which branch is dominating the Code Kitchen? Live rankings based on
-          event registrations.
-        </p>
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-black font-mono text-xs font-bold">
+          <Trophy className="w-3.5 h-3.5" />
+          {registrations.length} TOTAL REGISTRATIONS
+        </div>
       </div>
 
-      {/* Leaderboard */}
+      {/* Leaderboard Rows */}
       <div className="space-y-3">
         {leaderboard.map((entry, idx) => {
           const rank = idx + 1;
           const barWidth = mounted ? (entry.count / maxCount) * 100 : 0;
-          const barGradient = BAR_GRADIENTS[idx] || 'bg-slate-600';
-          const textInBar = rank <= 3 ? 'text-slate-950' : 'text-slate-300';
 
           return (
-            <div
+            <SpotlightCard
               key={entry.branch}
-              className="glass-card px-4 sm:px-5 py-4 rounded-2xl flex items-center gap-3 sm:gap-4 animate-slideUp"
-              style={{
-                animationDelay: `${idx * 0.08}s`,
-                animationFillMode: 'both',
-              }}
+              className="px-5 py-4 flex items-center gap-4"
             >
-              {/* Rank Badge */}
-              <div className="shrink-0 w-8 text-center">
-                {rank <= 3 ? (
-                  <span className="text-2xl">{RANK_MEDALS[idx]}</span>
-                ) : (
-                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-800 text-slate-400 text-sm font-bold font-mono">
-                    {rank}
-                  </span>
+              {/* Rank Number */}
+              <div
+                className={cn(
+                  "w-9 h-9 rounded-xl flex items-center justify-center font-mono text-xs font-bold shrink-0 border",
+                  rank === 1
+                    ? "bg-white text-black border-white"
+                    : "bg-zinc-950 text-zinc-400 border-zinc-800"
                 )}
+              >
+                #{rank}
               </div>
 
               {/* Branch Name */}
-              <span className="font-display font-semibold text-white text-sm sm:text-base w-20 sm:w-28 shrink-0 truncate">
-                {entry.branch}
-              </span>
+              <div className="w-24 sm:w-32 shrink-0">
+                <p className="font-display font-bold text-white text-base">
+                  {entry.branch}
+                </p>
+                <p className="font-mono text-[10px] text-zinc-500 uppercase">
+                  {Math.round((entry.count / registrations.length) * 100)}% SHARE
+                </p>
+              </div>
 
-              {/* Bar */}
-              <div className="flex-1 h-8 bg-slate-800/50 rounded-lg overflow-hidden relative">
+              {/* Monochrome Bar */}
+              <div className="flex-1 h-8 bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden relative">
                 <div
                   className={cn(
-                    'h-full rounded-lg transition-all duration-1000 ease-out',
-                    barGradient
+                    "h-full transition-all duration-1000 ease-out",
+                    rank === 1
+                      ? "bg-white"
+                      : rank === 2
+                      ? "bg-zinc-300"
+                      : "bg-zinc-600"
                   )}
                   style={{ width: `${barWidth}%` }}
                 />
                 <span
                   className={cn(
-                    'absolute right-3 top-1/2 -translate-y-1/2 font-mono font-bold text-sm',
-                    barWidth > 15 ? textInBar : 'text-slate-300'
+                    "absolute right-3 top-1/2 -translate-y-1/2 font-mono font-bold text-xs",
+                    barWidth > 18 && rank <= 2 ? "text-black" : "text-white"
                   )}
-                  style={{
-                    // If bar is small, position count outside
-                    ...(barWidth <= 15 ? { right: '-2.5rem' } : {}),
-                  }}
                 >
-                  {entry.count}
+                  {entry.count} CHEFS
                 </span>
               </div>
 
-              {/* Leader tag (1st place only) */}
               {rank === 1 && (
-                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/25 shrink-0 whitespace-nowrap">
-                  👑 Leading
+                <span className="hidden sm:inline-flex px-2.5 py-1 rounded-full text-[10px] font-mono uppercase font-bold bg-white text-black shrink-0">
+                  ★ LEADER
                 </span>
               )}
-            </div>
+            </SpotlightCard>
           );
         })}
       </div>
 
-      {/* Recent Activity Feed */}
+      {/* Live Feed */}
       {recentActivity.length > 0 && (
         <div className="mt-12">
-          <h2 className="text-lg font-display font-semibold text-white mb-4 flex items-center gap-2">
-            ⚡ Recent Kitchen Activity
+          <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-400 mb-4">
+            // LIVE REGISTRATION STREAM
           </h2>
-          <div className="space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {recentActivity.map((reg, idx) => (
               <div
                 key={reg.id || idx}
-                className="glass-card px-4 py-3 rounded-xl flex items-center justify-between gap-3 animate-slideUp"
-                style={{
-                  animationDelay: `${0.4 + idx * 0.06}s`,
-                  animationFillMode: 'both',
-                }}
+                className="glass-card px-4 py-3.5 rounded-xl flex items-center justify-between gap-3"
               >
-                <p className="text-sm min-w-0 truncate">
-                  <span className="text-white font-medium">{reg.name}</span>
-                  <span className="text-slate-400"> from </span>
-                  <span className="text-amber-400">{reg.branch}</span>
-                  <span className="text-slate-400"> joined </span>
-                  <span className="text-slate-300">{reg.eventTitle}</span>
-                </p>
-                <span className="text-[11px] font-mono text-slate-500 shrink-0 whitespace-nowrap">
-                  {reg.registeredAt}
+                <div className="min-w-0">
+                  <p className="text-sm text-white font-semibold truncate">
+                    {reg.name}{" "}
+                    <span className="font-mono text-xs text-zinc-400">
+                      [{reg.branch}]
+                    </span>
+                  </p>
+                  <p className="text-xs text-zinc-400 truncate mt-0.5">
+                    {reg.eventTitle}
+                  </p>
+                </div>
+                <span className="font-mono text-[10px] text-zinc-500 shrink-0">
+                  {reg.ticketId}
                 </span>
               </div>
             ))}

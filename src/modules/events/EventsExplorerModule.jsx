@@ -7,12 +7,12 @@ import {
   LayoutGrid,
   List,
   X,
-  Flame,
   Trophy,
   Users,
   BookOpen,
   ChefHat,
   Ticket,
+  ArrowUpRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import SpotlightCard from "@/components/ui/SpotlightCard";
@@ -30,38 +30,26 @@ const CATEGORIES = [
 function CapacityBar({ registered, capacity }) {
   const occupancy = capacity > 0 ? registered / capacity : 0;
   const pct = Math.min(100, occupancy * 100);
-  const barColor =
-    occupancy > 0.85
-      ? "bg-rose-500 animate-pulse"
-      : occupancy > 0.65
-      ? "bg-amber-500"
-      : "bg-emerald-500";
   const label =
     occupancy > 0.85
-      ? "Almost Full!"
+      ? "CRITICAL CAPACITY"
       : occupancy > 0.65
-      ? "Filling Fast 🔥"
-      : "Open";
-  const labelColor =
-    occupancy > 0.85
-      ? "text-rose-400"
-      : occupancy > 0.65
-      ? "text-amber-400"
-      : "text-emerald-400";
+      ? "FILLING FAST"
+      : "OPEN";
 
   return (
     <div className="mt-3">
-      <div className="flex items-center justify-between mb-1">
-        <span className="text-[11px] font-mono text-slate-400">
-          {registered}/{capacity} Seats
+      <div className="flex items-center justify-between mb-1.5">
+        <span className="text-[11px] font-mono text-zinc-400">
+          {registered}/{capacity} SEATS
         </span>
-        <span className={cn("text-[11px] font-mono font-semibold", labelColor)}>
-          {label}
+        <span className="text-[10px] font-mono font-bold tracking-wider text-white bg-zinc-900 border border-zinc-700 px-2 py-0.5 rounded">
+          {label} · {Math.round(pct)}%
         </span>
       </div>
-      <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+      <div className="h-1.5 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
         <div
-          className={cn("h-full rounded-full transition-all duration-700", barColor)}
+          className="h-full rounded-full bg-white transition-all duration-700"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -87,35 +75,35 @@ function RunOfShowModal({ event, onClose, onOpenRegister }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="glass-card max-w-3xl w-full max-h-[88vh] overflow-y-auto rounded-3xl p-6 sm:p-8 border border-amber-500/30 shadow-[0_0_60px_rgba(245,158,11,0.18)] animate-fadeIn relative">
+      <div className="glass-card max-w-3xl w-full max-h-[88vh] overflow-y-auto rounded-3xl p-6 sm:p-8 border border-white/25 shadow-[0_25px_80px_rgba(0,0,0,0.9)] animate-fadeIn relative">
         <button
           onClick={onClose}
-          className="cursor-pointer absolute top-5 right-5 p-2 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition"
+          className="cursor-pointer absolute top-5 right-5 p-2 rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="flex flex-wrap items-center gap-2 mb-3">
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/25">
+          <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-[11px] font-mono uppercase font-bold bg-white text-black">
             {event.category}
           </span>
           {event.featured && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-300 border border-rose-500/25">
-              <Flame className="w-3 h-3" /> Featured
+            <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-[11px] font-mono uppercase font-semibold bg-zinc-900 text-white border border-zinc-700">
+              ★ FLAGSHIP
             </span>
           )}
         </div>
 
-        <h2 className="font-display text-2xl font-bold text-white leading-snug pr-10">
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white leading-snug pr-10">
           {event.title}
         </h2>
         {event.subtitle && (
-          <p className="text-slate-400 text-sm mt-1.5">{event.subtitle}</p>
+          <p className="text-zinc-400 text-sm mt-1.5">{event.subtitle}</p>
         )}
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
@@ -129,11 +117,11 @@ function RunOfShowModal({ event, onClose, onOpenRegister }) {
             return (
               <div
                 key={item.label}
-                className="bg-slate-900/70 border border-slate-800 rounded-xl p-3"
+                className="bg-zinc-950 border border-zinc-800 rounded-xl p-3"
               >
                 <div className="flex items-center gap-1.5 mb-1">
-                  <Icon className="w-3.5 h-3.5 text-amber-400/70" />
-                  <span className="text-[10px] uppercase font-mono text-slate-500 tracking-wider">
+                  <Icon className="w-3.5 h-3.5 text-white" />
+                  <span className="text-[10px] uppercase font-mono text-zinc-500 tracking-wider">
                     {item.label}
                   </span>
                 </div>
@@ -149,7 +137,7 @@ function RunOfShowModal({ event, onClose, onOpenRegister }) {
         {traceSpans.length > 0 && (
           <div className="mt-6">
             <h3 className="font-display font-semibold text-white text-sm mb-3 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-amber-400" />
+              <Clock className="w-4 h-4 text-white" />
               Interactive Run-of-Show Trace (Press Play to Replay)
             </h3>
             <AgentTrace
@@ -170,14 +158,14 @@ function RunOfShowModal({ event, onClose, onOpenRegister }) {
               {event.mentors.map((mentor, idx) => (
                 <div
                   key={idx}
-                  className="bg-slate-900/80 border border-slate-800 rounded-xl px-3 py-2 flex items-center gap-2"
+                  className="bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 flex items-center gap-2.5"
                 >
                   <div>
                     <p className="text-sm text-white font-medium">{mentor.name}</p>
-                    <p className="text-[11px] text-slate-400">{mentor.role}</p>
+                    <p className="text-[11px] text-zinc-400">{mentor.role}</p>
                   </div>
                   {mentor.badge && (
-                    <span className="px-1.5 py-0.5 rounded-md text-[10px] font-mono bg-cyan-500/15 text-cyan-300 border border-cyan-500/25 shrink-0">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/10 text-white border border-white/20 shrink-0">
                       {mentor.badge}
                     </span>
                   )}
@@ -187,20 +175,20 @@ function RunOfShowModal({ event, onClose, onOpenRegister }) {
           </div>
         )}
 
-        <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-slate-800">
+        <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-zinc-800">
           <button
             onClick={() => {
               onOpenRegister(event);
               onClose();
             }}
-            className="cursor-pointer flex-1 flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 text-sm font-bold shadow-lg shadow-amber-500/25 hover:from-amber-400 hover:to-orange-500 transition-all"
+            className="cursor-pointer flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-black text-sm font-bold hover:bg-zinc-200 transition-all"
           >
             <Ticket className="w-4 h-4" />
-            Book Your Seat 🎫
+            Book Holographic Chef Pass
           </button>
           <button
             onClick={onClose}
-            className="cursor-pointer flex-1 flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold border border-slate-700 transition"
+            className="cursor-pointer flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-sm font-semibold border border-zinc-800 transition"
           >
             Close
           </button>
@@ -258,51 +246,58 @@ export default function EventsExplorerModule({
   }, [events, activeCategory, searchQuery, sortMode]);
 
   return (
-    <div className="px-4 py-10 sm:py-14 max-w-6xl mx-auto">
-      <div className="mb-8">
-        <span className="font-mono text-xs uppercase tracking-widest text-amber-400">
-          // Interactive Event Catalog
-        </span>
-        <h1 className="text-3xl sm:text-4xl font-display font-bold text-white mt-1">
-          ⚡ The Kitchen Menu
-        </h1>
-        <p className="text-slate-400 mt-1.5">
-          Hover any card for real-time spotlight telemetry, inspect the
-          AgentTrace run-of-show, or book your holographic QR pass.
-        </p>
+    <div className="px-4 py-12 sm:py-16 max-w-6xl mx-auto min-h-screen bg-cyber-grid">
+      {/* Editorial Header */}
+      <div className="mb-10 border-b border-zinc-800 pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <span className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-400">
+            01 // INTERACTIVE EVENT CATALOG
+          </span>
+          <h1 className="text-3xl sm:text-5xl font-display font-bold text-white mt-1 tracking-tight">
+            THE KITCHEN MENU.
+          </h1>
+          <p className="text-zinc-400 mt-2 text-sm max-w-xl">
+            Hover any card for 3D spotlight telemetry, inspect the live
+            AgentTrace run-of-show, or book your holographic QR pass.
+          </p>
+        </div>
+        <div className="font-mono text-xs text-zinc-500">
+          SHOWING <strong className="text-white">{filteredEvents.length}</strong>{" "}
+          OF {events.length} EVENTS
+        </div>
       </div>
 
       {/* Controls */}
       <div className="flex flex-wrap items-center gap-3 mb-6">
         <div className="relative flex-1 min-w-[220px]">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search events, venues, tags..."
-            className="w-full bg-slate-900/90 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-amber-500/50 focus:outline-none transition"
+            className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-white/50 focus:outline-none transition"
           />
         </div>
 
         <select
           value={sortMode}
           onChange={(e) => setSortMode(e.target.value)}
-          className="bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-mono text-slate-300 cursor-pointer"
+          className="bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs font-mono text-zinc-200 cursor-pointer focus:outline-none"
         >
-          <option value="date">Sort: Upcoming Date</option>
-          <option value="filling">Sort: Filling Fast 🔥</option>
-          <option value="capacity">Sort: Max Capacity</option>
+          <option value="date">SORT: UPCOMING DATE</option>
+          <option value="filling">SORT: FILLING FAST</option>
+          <option value="capacity">SORT: MAX CAPACITY</option>
         </select>
 
-        <div className="flex items-center gap-1 bg-slate-900/90 border border-slate-800 rounded-xl p-1">
+        <div className="flex items-center gap-1 bg-zinc-950 border border-zinc-800 rounded-xl p-1">
           <button
             onClick={() => setViewMode("grid")}
             className={cn(
               "cursor-pointer p-2 rounded-lg transition",
               viewMode === "grid"
-                ? "bg-amber-500/20 text-amber-400"
-                : "text-slate-500 hover:text-slate-300"
+                ? "bg-white text-black"
+                : "text-zinc-500 hover:text-zinc-200"
             )}
           >
             <LayoutGrid className="w-4 h-4" />
@@ -312,8 +307,8 @@ export default function EventsExplorerModule({
             className={cn(
               "cursor-pointer p-2 rounded-lg transition",
               viewMode === "compact"
-                ? "bg-amber-500/20 text-amber-400"
-                : "text-slate-500 hover:text-slate-300"
+                ? "bg-white text-black"
+                : "text-zinc-500 hover:text-zinc-200"
             )}
           >
             <List className="w-4 h-4" />
@@ -322,16 +317,16 @@ export default function EventsExplorerModule({
       </div>
 
       {/* Category Pills */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-6">
+      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8">
         {CATEGORIES.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
             className={cn(
-              "cursor-pointer whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-semibold border transition-all shrink-0",
+              "cursor-pointer whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-mono uppercase tracking-wider border transition-all shrink-0",
               activeCategory === cat
-                ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.18)]"
-                : "bg-slate-900/80 text-slate-400 border-slate-800 hover:text-white"
+                ? "bg-white text-black border-white font-bold shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                : "bg-zinc-950 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-600"
             )}
           >
             {cat}
@@ -341,13 +336,22 @@ export default function EventsExplorerModule({
 
       {/* Cards */}
       {filteredEvents.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <ChefHat className="w-10 h-10 text-slate-600 mb-3" />
-          <p className="text-slate-400 font-medium">
+        <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-zinc-800 rounded-3xl">
+          <ChefHat className="w-10 h-10 text-zinc-600 mb-3" />
+          <p className="text-zinc-300 font-medium">
             No events match your search
           </p>
+          <button
+            onClick={() => {
+              setSearchQuery("");
+              setActiveCategory("All");
+            }}
+            className="cursor-pointer mt-4 px-4 py-2 rounded-full bg-white text-black text-xs font-mono uppercase font-bold"
+          >
+            Reset Filters
+          </button>
         </div>
-      ) : (
+      ) : viewMode === "grid" ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredEvents.map((event) => {
             const liveCount = Math.max(
@@ -358,45 +362,45 @@ export default function EventsExplorerModule({
               <SpotlightCard
                 key={event.id}
                 enableTilt
-                className="p-5 flex flex-col justify-between"
+                className="p-6 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/25">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase font-bold bg-white text-black">
                       {event.category}
                     </span>
                     {event.prizePool && (
-                      <span className="font-mono text-[11px] text-emerald-400">
+                      <span className="font-mono text-[11px] text-zinc-300 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded">
                         {event.prizePool}
                       </span>
                     )}
                   </div>
 
-                  <h3 className="font-display font-bold text-lg text-white mt-3 line-clamp-2">
+                  <h3 className="font-display font-bold text-xl text-white mt-3.5 line-clamp-2 leading-snug">
                     {event.title}
                   </h3>
 
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2.5 text-xs text-slate-400">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2.5 text-xs font-mono text-zinc-400">
                     <span className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-amber-400/80" />
+                      <Calendar className="w-3.5 h-3.5 text-white" />
                       {event.date}
                     </span>
                     <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-amber-400/80" />
+                      <MapPin className="w-3.5 h-3.5 text-white" />
                       {event.venue}
                     </span>
                   </div>
 
-                  <p className="text-sm text-slate-400 line-clamp-2 mt-2.5">
+                  <p className="text-xs text-zinc-400 line-clamp-2 mt-3 leading-relaxed">
                     {event.description}
                   </p>
 
                   {event.tags && (
-                    <div className="flex flex-wrap gap-1.5 mt-3">
+                    <div className="flex flex-wrap gap-1.5 mt-3.5">
                       {event.tags.slice(0, 4).map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-900 text-slate-300 border border-slate-800"
+                          className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-950 text-zinc-300 border border-zinc-800"
                         >
                           {tag}
                         </span>
@@ -405,7 +409,7 @@ export default function EventsExplorerModule({
                   )}
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-slate-800/70">
+                <div className="pt-4 mt-5 border-t border-zinc-800/80">
                   <CapacityBar
                     registered={liveCount}
                     capacity={event.capacity}
@@ -413,20 +417,65 @@ export default function EventsExplorerModule({
                   <div className="flex gap-2 mt-4">
                     <button
                       onClick={() => setSelectedEvent(event)}
-                      className="cursor-pointer flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-semibold transition"
+                      className="cursor-pointer flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 text-xs font-semibold transition"
                     >
-                      <Clock className="w-3.5 h-3.5 text-amber-400" />
+                      <Clock className="w-3.5 h-3.5" />
                       Run-of-Show
                     </button>
                     <button
                       onClick={() => onOpenRegister(event)}
-                      className="cursor-pointer flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-orange-600 text-slate-950 text-xs font-bold shadow-lg shadow-amber-500/20 hover:from-amber-300 hover:to-orange-500 transition"
+                      className="cursor-pointer flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-white hover:bg-zinc-200 text-black text-xs font-bold transition"
                     >
-                      Book Pass 🎫
+                      Book Pass
+                      <ArrowUpRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
               </SpotlightCard>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="space-y-2.5">
+          {filteredEvents.map((event) => {
+            const liveCount = Math.max(
+              regCountMap[event.id] ?? 0,
+              event.registeredCount ?? 0
+            );
+            return (
+              <div
+                key={event.id}
+                className="glass-card rounded-2xl px-5 py-4 flex flex-wrap items-center justify-between gap-4"
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-white text-black font-bold">
+                      {event.category}
+                    </span>
+                    <h4 className="font-display font-bold text-white text-base truncate">
+                      {event.title}
+                    </h4>
+                  </div>
+                  <p className="text-xs font-mono text-zinc-400 mt-1">
+                    {event.date} · {event.venue} · {liveCount}/{event.capacity}{" "}
+                    Seats
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setSelectedEvent(event)}
+                    className="cursor-pointer px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-xs font-semibold border border-zinc-800"
+                  >
+                    Run-of-Show
+                  </button>
+                  <button
+                    onClick={() => onOpenRegister(event)}
+                    className="cursor-pointer px-4 py-2 rounded-xl bg-white hover:bg-zinc-200 text-black text-xs font-bold"
+                  >
+                    Book Seat
+                  </button>
+                </div>
+              </div>
             );
           })}
         </div>
