@@ -98,6 +98,22 @@ export default function HomeModule({
 }) {
   const featuredEvent = events.find((e) => e.featured) || events[0];
   const countdown = useCountdown(featuredEvent?.date);
+  const [homeSearch, setHomeSearch] = useState("");
+  const [homeCategory, setHomeCategory] = useState("All");
+
+  const filteredHomeEvents = useMemo(() => {
+    return events.filter((ev) => {
+      const matchCat = homeCategory === "All" || ev.category === homeCategory;
+      const q = homeSearch.trim().toLowerCase();
+      const matchName =
+        !q ||
+        [ev.title, ev.subtitle, ev.category, ev.venue, ...(ev.tags || [])]
+          .join(" ")
+          .toLowerCase()
+          .includes(q);
+      return matchCat && matchName;
+    });
+  }, [events, homeSearch, homeCategory]);
 
   // Convert featured event agenda into 21st.dev AgentTrace spans
   const traceSpans = useMemo(() => {
@@ -261,58 +277,133 @@ export default function HomeModule({
         </div>
       </section>
 
-      {/* ───────── 2.5. 21st.dev 3D Coverflow Event Stage ───────── */}
+      {/* ───────── 2.5. Search Events by Name + 3D Coverflow Event Stage ───────── */}
       <section className="max-w-6xl mx-auto px-4 pt-20 pb-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800 pb-6 mb-8">
           <div>
             <span className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-400">
-              01 // INTERACTIVE 3D COVERFLOW DECK
+              01 // SEARCH & SWIPE THE EVENT LINEUP
             </span>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mt-1 tracking-tight">
-              Swipe The Kitchen Event Lineup
+              Search Events by Name
             </h2>
           </div>
           <button
             onClick={() => onNavigate("events")}
             className="cursor-pointer inline-flex items-center gap-1.5 font-mono text-xs text-white hover:text-zinc-300 border border-zinc-800 rounded-full px-4 py-2 bg-zinc-900/80"
           >
-            Open Full Explorer <ChevronRight className="w-4 h-4" />
+            Open Full Explorer ({events.length}) <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="rounded-3xl border border-zinc-800/90 bg-[#070709]/95 py-8 px-2 sm:px-6 shadow-[0_30px_90px_rgba(0,0,0,0.85)]">
-          <CoverflowCarousel
-            slides={events.map((ev, idx) => ({
-              id: ev.id,
-              src: EVENT_POSTERS[idx % EVENT_POSTERS.length],
-              alt: ev.title,
-              title: ev.title,
-              subtitle: ev.subtitle || ev.description,
-              badge: ev.category,
-              dateLabel: ev.date,
-              prizePool: ev.prizePool,
-              featured: ev.featured,
-              rawEvent: ev,
-              meta: [
-                { label: "Date & Time", value: `${ev.date} · ${ev.time}` },
-                { label: "Campus Venue", value: ev.venue },
-                {
-                  label: "Seat Occupancy",
-                  value: `${ev.registeredCount || 0} / ${ev.capacity} Booked`,
-                },
-                {
-                  label: "Prize Pool",
-                  value: ev.prizePool || "Certificates + Swag",
-                },
-              ],
-            }))}
-            showCaption
-            showNavigation
-            showPagination
-            onBookEvent={onOpenRegister}
-            onInspectEvent={onSelectEvent}
-          />
+        {/* Prominent Live Search Events by Name Bar + Quick Filter Chips */}
+        <div className="mb-8 space-y-4">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={homeSearch}
+                onChange={(e) => setHomeSearch(e.target.value)}
+                placeholder="🔍 Search events by name (e.g., Cook-Off 7.0, ICPC Lockout, Next.js, GenAI, GSoC)..."
+                className="w-full bg-zinc-950 border-2 border-zinc-800 focus:border-white rounded-2xl px-5 py-3.5 text-sm text-white placeholder-zinc-500 focus:outline-none transition shadow-[0_10px_40px_rgba(0,0,0,0.6)]"
+              />
+              {homeSearch && (
+                <button
+                  type="button"
+                  onClick={() => setHomeSearch("")}
+                  className="cursor-pointer absolute right-3.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-white text-zinc-300 hover:text-black font-mono text-[10px] uppercase font-bold transition"
+                >
+                  CLEAR
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Quick Event Name & Category Chips */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 mr-1">
+              Filter by Category:
+            </span>
+            {[
+              "All",
+              "Hackathon",
+              "Competitive Programming",
+              "Development",
+              "Workshop",
+              "Tech Talk",
+            ].map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setHomeCategory(cat)}
+                className={cn(
+                  "cursor-pointer px-3.5 py-1 rounded-full text-[11px] font-mono uppercase tracking-wider border transition",
+                  homeCategory === cat
+                    ? "bg-white text-black border-white font-bold"
+                    : "bg-zinc-950 text-zinc-400 border-zinc-800 hover:text-white"
+                )}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
+
+        {filteredHomeEvents.length === 0 ? (
+          <div className="rounded-3xl border border-dashed border-zinc-800 bg-zinc-950/50 py-16 px-4 text-center">
+            <p className="font-display text-lg text-white font-bold">
+              No events found matching "{homeSearch}"
+            </p>
+            <p className="text-xs text-zinc-500 font-mono mt-1">
+              Try searching for Cook-Off, ICPC, Next.js, GenAI, or GSoC
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setHomeSearch("");
+                setHomeCategory("All");
+              }}
+              className="cursor-pointer mt-4 px-5 py-2 rounded-full bg-white text-black font-mono text-xs uppercase font-bold"
+            >
+              Reset Search
+            </button>
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-zinc-800/90 bg-[#070709]/95 py-8 px-2 sm:px-6 shadow-[0_30px_90px_rgba(0,0,0,0.85)]">
+            <CoverflowCarousel
+              key={`${homeCategory}-${homeSearch}`}
+              slides={filteredHomeEvents.map((ev, idx) => ({
+                id: ev.id,
+                src: EVENT_POSTERS[idx % EVENT_POSTERS.length],
+                alt: ev.title,
+                title: ev.title,
+                subtitle: ev.subtitle || ev.description,
+                badge: ev.category,
+                dateLabel: ev.date,
+                prizePool: ev.prizePool,
+                featured: ev.featured,
+                rawEvent: ev,
+                meta: [
+                  { label: "Date & Time", value: `${ev.date} · ${ev.time}` },
+                  { label: "Campus Venue", value: ev.venue },
+                  {
+                    label: "Seat Occupancy",
+                    value: `${ev.registeredCount || 0} / ${ev.capacity} Booked`,
+                  },
+                  {
+                    label: "Prize Pool",
+                    value: ev.prizePool || "Certificates + Swag",
+                  },
+                ],
+              }))}
+              showCaption
+              showNavigation
+              showPagination
+              onBookEvent={onOpenRegister}
+              onInspectEvent={onSelectEvent}
+            />
+          </div>
+        )}
       </section>
 
       {/* ───────── 3. Monochrome Bento Grid: Flagship + Live AgentTrace ───────── */}

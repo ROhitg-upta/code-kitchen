@@ -280,17 +280,26 @@ export default function EventsExplorerModule({
         </div>
       </div>
 
-      {/* Controls */}
-      <div className="flex flex-wrap items-center gap-3 mb-6">
-        <div className="relative flex-1 min-w-[220px]">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+      {/* Prominent Search Events by Name Bar + Controls */}
+      <div className="flex flex-wrap items-center gap-3 mb-4">
+        <div className="relative flex-1 min-w-[240px]">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search events, venues, tags..."
-            className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-white/50 focus:outline-none transition"
+            placeholder="Search events by name, category, venue, or tag..."
+            className="w-full bg-zinc-950 border-2 border-zinc-800 focus:border-white rounded-xl pl-11 pr-20 py-3 text-sm text-white placeholder-zinc-500 focus:outline-none transition"
           />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-white text-zinc-300 hover:text-black font-mono text-[10px] uppercase font-bold transition"
+            >
+              CLEAR
+            </button>
+          )}
         </div>
 
         <select

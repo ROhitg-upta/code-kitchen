@@ -83,11 +83,24 @@ app.get("/api/audit", async (_req, res) => {
   res.json({ success: true, data: auditLogs });
 });
 
-/* ───────── 3. Events CRUD ───────── */
-app.get("/api/events", async (_req, res) => {
+/* ───────── 3. Events CRUD & Search by Name ───────── */
+app.get("/api/events", async (req, res) => {
   try {
     await ensureStore();
-    const events = await store.getEvents();
+    let events = await store.getEvents();
+    const { search, category } = req.query;
+    if (category && category !== "All") {
+      events = events.filter((e) => e.category === category);
+    }
+    if (search && String(search).trim()) {
+      const q = String(search).trim().toLowerCase();
+      events = events.filter((e) =>
+        [e.title, e.subtitle, e.category, e.venue, ...(e.tags || [])]
+          .join(" ")
+          .toLowerCase()
+          .includes(q)
+      );
+    }
     res.json({ success: true, data: events });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
