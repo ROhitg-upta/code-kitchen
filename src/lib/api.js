@@ -43,5 +43,6 @@ export const chefApi = {
       body: JSON.stringify({ message }),
     }),
 
+  getAuditLogs: () => request("/audit"),
   resetData: () => request("/reset", { method: "POST" }),
 };

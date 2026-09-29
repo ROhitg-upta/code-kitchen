@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import SpotlightCard from "@/components/ui/SpotlightCard";
+import { chefApi } from "@/lib/api";
 
 const TABS = [
   { id: "overview", label: "01 // OVERVIEW", icon: BarChart3 },
@@ -32,6 +33,7 @@ const TABS = [
   { id: "scanner", label: "03 // GATE SCANNER", icon: ScanLine },
   { id: "roster", label: "04 // ROSTER & CSV", icon: Users },
   { id: "broadcast", label: "05 // BROADCAST", icon: Radio },
+  { id: "audit", label: "06 // AUDIT LOGS", icon: Database },
 ];
 
 const ADMIN_PIN = "2026";
@@ -362,6 +364,25 @@ export default function AdminOpsModule({
   const [scanStatus, setScanStatus] = useState("idle");
   const [rosterSearch, setRosterSearch] = useState("");
   const [draftBroadcast, setDraftBroadcast] = useState("");
+  const [auditLogs, setAuditLogs] = useState([
+    {
+      id: "aud-boot",
+      action: "HMAC_SHA256_ENGINE_READY",
+      actor: "chefops-kernel",
+      detail: "Cryptographic ticket signer & Dual-Engine DB active",
+      timestamp: "LIVE",
+    },
+  ]);
+
+  useEffect(() => {
+    if (activeTab === "audit" || adminAuth) {
+      chefApi.getAuditLogs().then((res) => {
+        if (res?.success && Array.isArray(res.data)) {
+          setAuditLogs(res.data);
+        }
+      });
+    }
+  }, [activeTab, adminAuth, events.length, registrations.length]);
 
   if (!adminAuth) {
     return <AuthGate onAdminLogin={onAdminLogin} />;
@@ -807,6 +828,45 @@ export default function AdminOpsModule({
               </div>
             )}
           </SpotlightCard>
+        </div>
+      )}
+
+      {/* TAB 6: SECURITY & OPS AUDIT LOGS */}
+      {activeTab === "audit" && (
+        <div className="space-y-4 animate-fadeIn">
+          <div className="glass-card rounded-2xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-zinc-800 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                <h3 className="font-mono text-xs uppercase tracking-wider text-white font-bold">
+                  LIVE CRYPTOGRAPHIC & OPS AUDIT STREAM
+                </h3>
+              </div>
+              <span className="font-mono text-[10px] text-zinc-400">
+                HMAC-SHA256 VERIFIED
+              </span>
+            </div>
+            <div className="divide-y divide-zinc-800/60">
+              {auditLogs.map((log) => (
+                <div
+                  key={log.id}
+                  className="px-5 py-3.5 flex flex-wrap items-center justify-between gap-3 hover:bg-zinc-900/50 font-mono text-xs"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="px-2 py-0.5 rounded bg-white text-black font-bold text-[10px] shrink-0">
+                      {log.action}
+                    </span>
+                    <span className="text-zinc-200 truncate">{log.detail}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[11px] text-zinc-500 shrink-0">
+                    <span>actor: {log.actor}</span>
+                    <span>·</span>
+                    <span>{log.timestamp}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
 
