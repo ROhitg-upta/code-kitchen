@@ -27,6 +27,7 @@ import AiChefFinderModule from "./modules/concierge/AiChefFinderModule";
 import BranchBattleModule from "./modules/leaderboard/BranchBattleModule";
 import CommandPalette from "./modules/command/CommandPalette";
 import AgentTrace from "./components/ui/AgentTrace";
+import CinematicFooter from "./components/ui/CinematicFooter";
 import { chefApi } from "./lib/api";
 
 const NAV_ITEMS = [
@@ -423,8 +424,8 @@ export default function App() {
         </div>
       )}
 
-      {/* ───────── Main Content ───────── */}
-      <main className="flex-1">
+      {/* ───────── Main Content (Curtain Stage z-10) ───────── */}
+      <main className="relative z-10 flex-1 bg-[#050505] rounded-b-[2.5rem] border-b border-zinc-800/90 shadow-[0_35px_100px_rgba(0,0,0,0.98)] overflow-hidden">
         {activeView === "home" && (
           <HomeModule
             events={events}
@@ -469,6 +470,14 @@ export default function App() {
           />
         )}
       </main>
+
+      {/* ───────── Cinematic Scroll-Reveal Sticky Footer (z-0 Curtain Reveal) ───────── */}
+      <CinematicFooter
+        onNavigate={handleNavigate}
+        onOpenRegister={setRegisterEvent}
+        onExportCsv={handleExportCsv}
+        featuredEvent={events.find((e) => e.featured) || events[0]}
+      />
 
       {/* ───────── My Passes Drawer ───────── */}
       {myPassesOpen && (
