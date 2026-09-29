@@ -253,13 +253,44 @@ export default function App() {
       {/* ───────── Monochrome Top Navigation Bar ───────── */}
       <header className="sticky top-0 z-40 bg-black/90 backdrop-blur-xl border-b border-zinc-800">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
-          {/* Brand Logo */}
+          {/* Brand Logo with Custom Chef + Code Web Icon */}
           <button
             onClick={() => handleNavigate("home")}
             className="cursor-pointer flex items-center gap-3 text-left group"
           >
-            <div className="w-9 h-9 rounded-xl bg-white text-black flex items-center justify-center font-mono font-bold text-sm group-hover:scale-105 transition-transform">
-              CC
+            <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center shadow-[0_0_25px_rgba(255,255,255,0.2)] group-hover:scale-105 transition-transform overflow-hidden p-1.5">
+              <svg
+                viewBox="0 0 64 64"
+                fill="none"
+                className="w-full h-full"
+                aria-hidden="true"
+              >
+                <path
+                  d="M22 26C18.6863 26 16 23.3137 16 20C16 16.6863 18.6863 14 22 14C23.31 14 24.52 14.42 25.5 15.13C27.05 12.66 29.83 11 33 11C36.17 11 38.95 12.66 40.5 15.13C41.48 14.42 42.69 14 44 14C47.3137 14 50 16.6863 50 20C50 23.3137 47.3137 26 44 26H22Z"
+                  fill="#050505"
+                />
+                <rect x="21" y="28" width="24" height="4" rx="1.5" fill="#050505" />
+                <path
+                  d="M24 38L17 44L24 50"
+                  stroke="#050505"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M42 38L49 44L42 50"
+                  stroke="#050505"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M35.5 36L30.5 52"
+                  stroke="#3f3f46"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+              </svg>
             </div>
             <div>
               <span className="font-display font-bold text-white text-base tracking-tight block leading-none">
