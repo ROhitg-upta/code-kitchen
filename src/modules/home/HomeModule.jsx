@@ -18,6 +18,15 @@ import { cn } from "@/lib/utils";
 import CrowdCanvas from "@/components/ui/CrowdCanvas";
 import AgentTrace from "@/components/ui/AgentTrace";
 import SpotlightCard from "@/components/ui/SpotlightCard";
+import { CoverflowCarousel } from "@/components/ui/coverflow-carousel";
+
+const EVENT_POSTERS = [
+  "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=800&fit=crop&q=80",
+];
 
 const STATIONS = [
   {
@@ -249,6 +258,60 @@ export default function HomeModule({
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ───────── 2.5. 21st.dev 3D Coverflow Event Stage ───────── */}
+      <section className="max-w-6xl mx-auto px-4 pt-20 pb-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800 pb-6 mb-8">
+          <div>
+            <span className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-400">
+              01 // INTERACTIVE 3D COVERFLOW DECK
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mt-1 tracking-tight">
+              Swipe The Kitchen Event Lineup
+            </h2>
+          </div>
+          <button
+            onClick={() => onNavigate("events")}
+            className="cursor-pointer inline-flex items-center gap-1.5 font-mono text-xs text-white hover:text-zinc-300 border border-zinc-800 rounded-full px-4 py-2 bg-zinc-900/80"
+          >
+            Open Full Explorer <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="rounded-3xl border border-zinc-800/90 bg-[#070709]/95 py-8 px-2 sm:px-6 shadow-[0_30px_90px_rgba(0,0,0,0.85)]">
+          <CoverflowCarousel
+            slides={events.map((ev, idx) => ({
+              id: ev.id,
+              src: EVENT_POSTERS[idx % EVENT_POSTERS.length],
+              alt: ev.title,
+              title: ev.title,
+              subtitle: ev.subtitle || ev.description,
+              badge: ev.category,
+              dateLabel: ev.date,
+              prizePool: ev.prizePool,
+              featured: ev.featured,
+              rawEvent: ev,
+              meta: [
+                { label: "Date & Time", value: `${ev.date} · ${ev.time}` },
+                { label: "Campus Venue", value: ev.venue },
+                {
+                  label: "Seat Occupancy",
+                  value: `${ev.registeredCount || 0} / ${ev.capacity} Booked`,
+                },
+                {
+                  label: "Prize Pool",
+                  value: ev.prizePool || "Certificates + Swag",
+                },
+              ],
+            }))}
+            showCaption
+            showNavigation
+            showPagination
+            onBookEvent={onOpenRegister}
+            onInspectEvent={onSelectEvent}
+          />
         </div>
       </section>
 

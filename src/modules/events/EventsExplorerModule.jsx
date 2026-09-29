@@ -13,10 +13,12 @@ import {
   ChefHat,
   Ticket,
   ArrowUpRight,
+  Disc3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import SpotlightCard from "@/components/ui/SpotlightCard";
 import AgentTrace from "@/components/ui/AgentTrace";
+import { CoverflowCarousel } from "@/components/ui/coverflow-carousel";
 
 const CATEGORIES = [
   "All",
@@ -25,6 +27,16 @@ const CATEGORIES = [
   "Development",
   "Workshop",
   "Tech Talk",
+];
+
+// Curated Unsplash Stock Photography for 3D Coverflow Event Posters
+const EVENT_POSTERS = [
+  "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=800&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&h=800&fit=crop&q=80",
 ];
 
 function CapacityBar({ registered, capacity }) {
@@ -133,7 +145,6 @@ function RunOfShowModal({ event, onClose, onOpenRegister }) {
           })}
         </div>
 
-        {/* 21st.dev AgentTrace Interactive Timeline */}
         {traceSpans.length > 0 && (
           <div className="mt-6">
             <h3 className="font-display font-semibold text-white text-sm mb-3 flex items-center gap-2">
@@ -145,33 +156,6 @@ function RunOfShowModal({ event, onClose, onOpenRegister }) {
               spans={traceSpans}
               totalDuration={traceSpans.length * 1500}
             />
-          </div>
-        )}
-
-        {/* Mentors */}
-        {event.mentors && event.mentors.length > 0 && (
-          <div className="mt-5">
-            <h3 className="font-display font-semibold text-white text-sm mb-3">
-              Mentors & Judges
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {event.mentors.map((mentor, idx) => (
-                <div
-                  key={idx}
-                  className="bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 flex items-center gap-2.5"
-                >
-                  <div>
-                    <p className="text-sm text-white font-medium">{mentor.name}</p>
-                    <p className="text-[11px] text-zinc-400">{mentor.role}</p>
-                  </div>
-                  {mentor.badge && (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/10 text-white border border-white/20 shrink-0">
-                      {mentor.badge}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
           </div>
         )}
 
@@ -206,7 +190,8 @@ export default function EventsExplorerModule({
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [sortMode, setSortMode] = useState("date");
-  const [viewMode, setViewMode] = useState("grid");
+  // Default view is now "coverflow" per user request!
+  const [viewMode, setViewMode] = useState("coverflow");
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   const regCountMap = useMemo(() => {
@@ -245,20 +230,48 @@ export default function EventsExplorerModule({
     return result;
   }, [events, activeCategory, searchQuery, sortMode]);
 
+  // Convert filteredEvents into 3D Coverflow slides
+  const coverflowSlides = useMemo(() => {
+    return filteredEvents.map((event, idx) => {
+      const liveCount = Math.max(
+        regCountMap[event.id] ?? 0,
+        event.registeredCount ?? 0
+      );
+      return {
+        id: event.id,
+        src: EVENT_POSTERS[idx % EVENT_POSTERS.length],
+        alt: event.title,
+        title: event.title,
+        subtitle: event.subtitle || event.description,
+        badge: event.category,
+        dateLabel: event.date,
+        prizePool: event.prizePool,
+        featured: event.featured,
+        rawEvent: event,
+        meta: [
+          { label: "Date & Time", value: `${event.date} · ${event.time}` },
+          { label: "Campus Venue", value: event.venue },
+          { label: "Seat Occupancy", value: `${liveCount} / ${event.capacity} Booked` },
+          { label: "Prize Pool", value: event.prizePool || "Certificates + Swag" },
+        ],
+      };
+    });
+  }, [filteredEvents, regCountMap]);
+
   return (
     <div className="px-4 py-12 sm:py-16 max-w-6xl mx-auto min-h-screen bg-cyber-grid">
       {/* Editorial Header */}
-      <div className="mb-10 border-b border-zinc-800 pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <div className="mb-8 border-b border-zinc-800 pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <span className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-400">
-            01 // INTERACTIVE EVENT CATALOG
+            01 // 3D COVERFLOW EVENT STAGE
           </span>
           <h1 className="text-3xl sm:text-5xl font-display font-bold text-white mt-1 tracking-tight">
             THE KITCHEN MENU.
           </h1>
           <p className="text-zinc-400 mt-2 text-sm max-w-xl">
-            Hover any card for 3D spotlight telemetry, inspect the live
-            AgentTrace run-of-show, or book your holographic QR pass.
+            Swipe or drag the 3D Coverflow deck, use keyboard arrow keys, or
+            switch between 3D Coverflow, Bento Grid, and Compact views.
           </p>
         </div>
         <div className="font-mono text-xs text-zinc-500">
@@ -290,7 +303,21 @@ export default function EventsExplorerModule({
           <option value="capacity">SORT: MAX CAPACITY</option>
         </select>
 
+        {/* 3-Way View Switcher: 3D Coverflow | Grid | Compact */}
         <div className="flex items-center gap-1 bg-zinc-950 border border-zinc-800 rounded-xl p-1">
+          <button
+            onClick={() => setViewMode("coverflow")}
+            className={cn(
+              "cursor-pointer flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono uppercase font-bold transition",
+              viewMode === "coverflow"
+                ? "bg-white text-black"
+                : "text-zinc-400 hover:text-white"
+            )}
+            title="3D Coverflow View"
+          >
+            <Disc3 className="w-3.5 h-3.5" />
+            3D Coverflow
+          </button>
           <button
             onClick={() => setViewMode("grid")}
             className={cn(
@@ -299,6 +326,7 @@ export default function EventsExplorerModule({
                 ? "bg-white text-black"
                 : "text-zinc-500 hover:text-zinc-200"
             )}
+            title="Bento Grid View"
           >
             <LayoutGrid className="w-4 h-4" />
           </button>
@@ -310,6 +338,7 @@ export default function EventsExplorerModule({
                 ? "bg-white text-black"
                 : "text-zinc-500 hover:text-zinc-200"
             )}
+            title="Compact List View"
           >
             <List className="w-4 h-4" />
           </button>
@@ -317,7 +346,7 @@ export default function EventsExplorerModule({
       </div>
 
       {/* Category Pills */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8">
+      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-6">
         {CATEGORIES.map((cat) => (
           <button
             key={cat}
@@ -334,7 +363,7 @@ export default function EventsExplorerModule({
         ))}
       </div>
 
-      {/* Cards */}
+      {/* Events Display */}
       {filteredEvents.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-zinc-800 rounded-3xl">
           <ChefHat className="w-10 h-10 text-zinc-600 mb-3" />
@@ -351,7 +380,20 @@ export default function EventsExplorerModule({
             Reset Filters
           </button>
         </div>
+      ) : viewMode === "coverflow" ? (
+        /* ── 21st.dev 3D Coverflow Stage ── */
+        <div className="rounded-3xl border border-zinc-800/90 bg-[#070709]/95 py-8 px-2 sm:px-6 shadow-[0_30px_90px_rgba(0,0,0,0.85)]">
+          <CoverflowCarousel
+            slides={coverflowSlides}
+            showCaption
+            showNavigation
+            showPagination
+            onBookEvent={onOpenRegister}
+            onInspectEvent={(ev) => setSelectedEvent(ev)}
+          />
+        </div>
       ) : viewMode === "grid" ? (
+        /* ── Bento Grid View ── */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredEvents.map((event) => {
             const liveCount = Math.max(
@@ -394,19 +436,6 @@ export default function EventsExplorerModule({
                   <p className="text-xs text-zinc-400 line-clamp-2 mt-3 leading-relaxed">
                     {event.description}
                   </p>
-
-                  {event.tags && (
-                    <div className="flex flex-wrap gap-1.5 mt-3.5">
-                      {event.tags.slice(0, 4).map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-950 text-zinc-300 border border-zinc-800"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </div>
 
                 <div className="pt-4 mt-5 border-t border-zinc-800/80">
@@ -436,6 +465,7 @@ export default function EventsExplorerModule({
           })}
         </div>
       ) : (
+        /* ── Compact View ── */
         <div className="space-y-2.5">
           {filteredEvents.map((event) => {
             const liveCount = Math.max(
