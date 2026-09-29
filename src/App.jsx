@@ -14,6 +14,8 @@ import {
   MapPin,
   Users,
   BookOpen,
+  Search,
+  ArrowUpRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { INITIAL_EVENTS, INITIAL_REGISTRATIONS } from "./data/initialData";
@@ -326,48 +328,52 @@ export default function App() {
             })}
           </nav>
 
-          {/* Right Actions */}
-          <div className="flex items-center gap-2">
-            <span
-              className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-950 border border-zinc-800 text-[10px] font-mono text-zinc-400"
-              title={
-                backendLive
-                  ? "Connected to Express + MongoDB/JSON Backend API"
-                  : "Using LocalStorage Persistence Mode"
-              }
-            >
-              <span
-                className={cn(
-                  "w-1.5 h-1.5 rounded-full",
-                  backendLive ? "bg-white animate-pulse" : "bg-zinc-500"
-                )}
-              />
-              {backendLive ? "API LIVE" : "LOCAL DB"}
-            </span>
-
-            <button
-              onClick={() => setMyPassesOpen(true)}
-              className="cursor-pointer flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-white transition"
-              title="View Registered Passes"
-            >
-              <Ticket className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">My Passes</span>
-              {registrations.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-white text-black font-mono text-[10px] font-bold">
-                  {registrations.length}
-                </span>
-              )}
-            </button>
-
+          {/* Right Actions — Linear / Raycast Style Control Cluster */}
+          <div className="flex items-center gap-2.5">
+            {/* 1. Raycast-Style Command & Event Search Bar */}
             <button
               onClick={() => setCmdPaletteOpen(true)}
-              className="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-mono text-zinc-300 hover:text-white transition"
-              title="Open Command Palette (Ctrl+K)"
+              className="cursor-pointer group flex items-center justify-between gap-3 pl-3 pr-2 py-1.5 rounded-xl bg-zinc-950/90 hover:bg-zinc-900 border border-zinc-800/90 hover:border-zinc-600 text-xs text-zinc-400 hover:text-white transition-all shadow-inner"
+              title="Search events or run command (Ctrl+K)"
             >
-              <Terminal className="w-3.5 h-3.5" />
-              <kbd className="text-[10px]">⌘K</kbd>
+              <span className="flex items-center gap-2">
+                <Search className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white transition-colors" />
+                <span className="hidden sm:inline font-medium text-zinc-400 group-hover:text-zinc-200">
+                  Search...
+                </span>
+              </span>
+              <kbd className="px-1.5 py-0.5 rounded-md bg-zinc-900 group-hover:bg-zinc-800 border border-zinc-700/80 font-mono text-[10px] font-semibold text-zinc-300 tracking-tight shadow-sm">
+                Ctrl K
+              </kbd>
             </button>
 
+            {/* 2. Pass Wallet Button with Live Counter */}
+            <button
+              onClick={() => setMyPassesOpen(true)}
+              className="cursor-pointer group flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-xl bg-zinc-950/90 hover:bg-zinc-900 border border-zinc-800/90 hover:border-zinc-600 text-xs font-medium text-zinc-200 hover:text-white transition-all"
+              title="View Issued Holographic QR Passes"
+            >
+              <Ticket className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white transition-colors" />
+              <span className="hidden lg:inline">Passes</span>
+              <span className="px-1.5 py-0.5 rounded-md bg-white text-black font-mono text-[10px] font-extrabold leading-none">
+                {registrations.length}
+              </span>
+            </button>
+
+            {/* 3. High-Contrast Primary Quick-Book CTA (Right Anchor) */}
+            <button
+              onClick={() => {
+                const feat = events.find((e) => e.featured) || events[0];
+                if (feat) setRegisterEvent(feat);
+                else handleNavigate("events");
+              }}
+              className="cursor-pointer hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white hover:bg-zinc-200 text-black text-xs font-bold tracking-tight transition-all active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.18)]"
+            >
+              <span>Get Pass</span>
+              <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
+            </button>
+
+            {/* Mobile Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(true)}
               className="cursor-pointer md:hidden p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white"
