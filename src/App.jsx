@@ -345,16 +345,6 @@ export default function App() {
               {backendLive ? "API LIVE" : "LOCAL DB"}
             </span>
 
-            <a
-              href="/TASK-2-EVENT-BLUEPRINT.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="cursor-pointer hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-black hover:bg-zinc-200 text-xs font-mono uppercase font-bold transition shadow-[0_0_20px_rgba(255,255,255,0.2)]"
-              title="Open Interactive Task 2 Event Planning Blueprint (Google Docs Ready)"
-            >
-              📋 Task 2 Doc
-            </a>
-
             <button
               onClick={() => setMyPassesOpen(true)}
               className="cursor-pointer flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-white transition"
