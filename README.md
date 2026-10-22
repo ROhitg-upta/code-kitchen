@@ -9,7 +9,9 @@
 
 ## 🎯 What Makes This Different
 
-The recruitment task asks for a "responsive web application for managing and displaying college club events." Here's how ChefOps v2.6 compares against a standard submission:
+The recruitment task asks for a "responsive web application for managing and displaying college club events." Here's how ChefOps v2.6 compares against a standard submission:]
+
+
 
 | Task Requirement | Standard Submission | 🔥 ChefOps v2.6 |
 |:---|:---|:---|
